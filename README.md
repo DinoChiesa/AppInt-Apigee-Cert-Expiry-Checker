@@ -8,11 +8,15 @@ It sends an email after collecting results. The default schedule is nightly.
 
 The email looks like this:
 
-![example email](./+/refs/heads/main/images/example-report-3fmHkZETHbZ55N6.png)
+
+![example email](https://screenshot.googleplex.com/8wu7LRxk7nf9oJB.png)
+<!-- ![example email](./images/example-report-3fmHkZETHbZ55N6.png) -->
 
 If there are no keystores in the environments, the email looks like this:
 
-![example email #2](./images/no-keystores-3ZcPgt7n88AFdkc.png)
+
+![example email #2](https://screenshot.googleplex.com/7W7u2ai7q2QoVof.png)
+<!-- ![example email #2](./images/no-keystores-3ZcPgt7n88AFdkc.png) -->
 
 
 ## Pre-requisites
