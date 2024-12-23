@@ -8,7 +8,7 @@ It sends an email after collecting results. The default schedule is nightly.
 
 The email looks like this:
 
-![example email](./images/example-report-3fmHkZETHbZ55N6.png)
+![example email](./+/refs/heads/main/images/example-report-3fmHkZETHbZ55N6.png)
 
 If there are no keystores in the environments, the email looks like this:
 
