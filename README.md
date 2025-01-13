@@ -87,7 +87,7 @@ The Integration will run on a schedule.  If you would like to run it
 pro-actively, _right now_, use the following script to invoke the trigger
 from the command line:
 
-```
+```sh
 ./test-invoke-integration.sh
 ```
 
@@ -110,7 +110,7 @@ But there is an easier way to add a new prject: just enable the existing service
 account with apigee.readOnlyAdmin role, on the new project or projects. There's
 a script that can do _just that_:
 
-```
+```sh
 ./add-apigee-project.sh project-id-of-additional-apigee-org
 ```
 
@@ -133,7 +133,7 @@ you must start over. To do so, follow these steps:
 3. source the modified env.sh script, and then re-run the setup.
    ```sh
    source ./env.sh
-  ./setup-cert-expiry-checker.sh
+   ./setup-cert-expiry-checker.sh
    ```
 
 
@@ -141,7 +141,7 @@ you must start over. To do so, follow these steps:
 
 The cleanup script will remove everything the setup script had set up.
 
-```
+```sh
 source ./env.sh
 ./clean-cert-expiry-checker.sh
 ```
