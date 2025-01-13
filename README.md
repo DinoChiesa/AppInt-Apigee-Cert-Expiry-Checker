@@ -9,14 +9,20 @@ It sends an email after collecting results. The default schedule is nightly.
 The email looks like this:
 
 
-![example email](https://screenshot.googleplex.com/8wu7LRxk7nf9oJB.png)
-<!-- ![example email](./images/example-report-3fmHkZETHbZ55N6.png) -->
+<!-- ![example email](https://screenshot.googleplex.com/8wu7LRxk7nf9oJB.png) -->
+![example email](./images/example-report-3fmHkZETHbZ55N6.png)
 
 If there are no keystores in the environments, the email looks like this:
 
 
-![example email #2](https://screenshot.googleplex.com/7W7u2ai7q2QoVof.png)
-<!-- ![example email #2](./images/no-keystores-3ZcPgt7n88AFdkc.png) -->
+<!-- ![example email #2](https://screenshot.googleplex.com/7W7u2ai7q2QoVof.png)  -->
+![example email #2](./images/no-keystores-3ZcPgt7n88AFdkc.png)
+
+
+## Disclaimer
+
+This example is not an official Google product, nor is it part of an
+official Google product.
 
 
 ## Pre-requisites
@@ -57,7 +63,7 @@ Save the file.
 
 Then, source that script, and run the setup script.
 
-```
+```sh
 source ./env.sh
 ./setup-cert-expiry-checker.sh
 ```
@@ -74,7 +80,18 @@ settings for the report.
 At the end of the script output, you should see a link to the cloud console page
 that will allow you to view the integration.
 
-## Modifying
+
+## Invoke the Integration
+
+The Integration will run on a schedule.  If you would like to run it
+pro-actively, _right now_, use the following script to invoke the trigger
+from the command line:
+
+```
+./test-invoke-integration.sh
+```
+
+## Modifying the Integration
 
 After the setup script succeeds, you will be able to modify and tweak the
 integration interactively, using the Cloud Console UI. To do that, open the link
@@ -82,6 +99,8 @@ the script displayed in a browser. Use the TEST button, and specify the Schedule
 trigger.
 
 Note: The integration is set to execute on a schedule, nightly at 21:04.
+
+### Changing the set of Projects to check
 
 If you want to run it against a _different_ set of Apigee projects than that
 specified in the env.sh file, one option is start all over: to run the clean up
@@ -98,14 +117,25 @@ a script that can do _just that_:
 Then you can use the Cloud Console UI to re-run the TEST with the Schedule
 trigger, specifying the newly-added project.
 
+### Changing anything else
 
-## Re-running it
+To change anything other than the set of Apigee projects to check, in an automated fashion,
+you must start over. To do so, follow these steps:
 
-Use this script to just invoke the trigger from the command line:
+1. run the clean up script
+   ```sh
+   source ./env.sh
+   ./clean-cert-expiry-checker.sh
+   ```
 
-```
-./test-invoke-integration.sh
-```
+2. modify env.sh
+
+3. source the modified env.sh script, and then re-run the setup.
+   ```sh
+   source ./env.sh
+  ./setup-cert-expiry-checker.sh
+   ```
+
 
 ## Teardown
 
@@ -115,3 +145,21 @@ The cleanup script will remove everything the setup script had set up.
 source ./env.sh
 ./clean-cert-expiry-checker.sh
 ```
+
+
+## Support
+
+This example is open-source software, and is not a supported part of Google Cloud.  If
+you need assistance, you can try inquiring on [the Google Cloud Community forum
+dedicated to Application Integration](https://goo.gle/appint-community) There is no service-level
+guarantee for responses to inquiries posted to that site.
+
+## License
+
+This material is [Copyright 2024-2025 Google LLC](./NOTICE).
+and is licensed under the [Apache 2.0 License](LICENSE). This includes the setup code
+as well as the Integration configuration.
+
+## Bugs
+
+* ??
