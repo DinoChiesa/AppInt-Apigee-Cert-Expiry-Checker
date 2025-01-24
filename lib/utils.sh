@@ -94,11 +94,11 @@ invoke_one() {
   url="${APPINT_ENDPT}/v1/projects/${APPINT_PROJECT}/locations/${REGION}/integrations/${integration_name}:execute"
 
   if [[ -z "$3" || "$3" != "just-show-command" ]]; then
-    printf "CURL -X POST ${url} -H 'Content-Type: application/json' -H \"Authorization: Bearer \$TOKEN\" -d '{  \"triggerId\": \"$trigger_id\" }'\n"
+    printf "curl -X POST ${url} -H 'Content-Type: application/json' -H \"Authorization: Bearer \$TOKEN\" -d '{  \"triggerId\": \"$trigger_id\" }'\n"
     CURL -X POST "${url}" -H 'Content-Type: application/json' -d '{  "triggerId": "'$trigger_id'" }'
     cat ${CURL_OUT}
   else
     printf "To invoke yourself:\n"
-    printf "CURL -X POST ${url} -H 'Content-Type: application/json' -H \"Authorization: Bearer \$TOKEN\" -d '{  \"triggerId\": \"$trigger_id\" }'\n"
+    printf "curl -X POST ${url} -H 'Content-Type: application/json' -H \"Authorization: Bearer \$TOKEN\" -d '{  \"triggerId\": \"$trigger_id\" }'\n"
   fi
 }
