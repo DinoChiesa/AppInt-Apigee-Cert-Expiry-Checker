@@ -8,7 +8,6 @@ It sends an email after collecting results. The default schedule is nightly.
 
 The email looks like this:
 
-
 <!-- ![example email](https://screenshot.googleplex.com/8wu7LRxk7nf9oJB.png) -->
 ![example email](./images/example-report-3fmHkZETHbZ55N6.png)
 
@@ -162,4 +161,4 @@ as well as the Integration configuration.
 
 ## Bugs
 
-* ??
+* ?

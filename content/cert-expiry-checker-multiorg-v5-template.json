@@ -659,6 +659,12 @@
       "task": "JavaScriptTask",
       "taskId": "17",
       "parameters": {
+        "javaScriptEngine": {
+          "key": "javaScriptEngine",
+          "value": {
+            "stringValue": "V8"
+          }
+        },
         "script": {
           "key": "script",
           "value": {
@@ -771,6 +777,12 @@
       "task": "JavaScriptTask",
       "taskId": "21",
       "parameters": {
+        "javaScriptEngine": {
+          "key": "javaScriptEngine",
+          "value": {
+            "stringValue": "V8"
+          }
+        },
         "script": {
           "key": "script",
           "value": {
@@ -833,6 +845,12 @@
       "task": "JavaScriptTask",
       "taskId": "24",
       "parameters": {
+        "javaScriptEngine": {
+          "key": "javaScriptEngine",
+          "value": {
+            "stringValue": "V8"
+          }
+        },
         "script": {
           "key": "script",
           "value": {

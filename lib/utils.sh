@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2024 Google LLC
+# Copyright 2024-2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,10 +25,12 @@ env_vars_to_check=(
 )
 
 maybe_install_integrationcli() {
-  if [[ ! -d "$HOME/.apigeecli/bin" ]]; then
-    echo "\nInstalling integrationcli"
-    curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
-  fi
+  # versions get updated regularly. I don't know how to check for latest.
+  # So the safest bet is to just unconditionally install.
+  #  if [[ ! -d "$HOME/.apigeecli/bin" ]]; then
+  echo "\nInstalling integrationcli"
+  curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
+  # fi
   export PATH=$PATH:$HOME/.integrationcli/bin
 }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2023-2024 Google LLC
+# Copyright 2023-2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -201,6 +201,29 @@ replace_keywords_in_template() {
   rm -f $TMP
 }
 
+replace_content_files_in_template() {
+  local TMP
+  TMP=$(mktemp /tmp/appint-setup.tmp.out.XXXXXX)
+
+  # This slurps in a content file and inserts it into the appropriate place in
+  # the template. For now, content files include various JavaScripts and the
+  # email text body template.
+
+  jq --arg content "$(cat ./content/processExpiry.js)" \
+    '(.taskConfigs[] | select(.task == "JavaScriptTask" and .taskId == "17") | .parameters).script.value.stringValue = $content' $INTEGRATION_FILE >$TMP && cp $TMP $INTEGRATION_FILE
+
+  jq --arg content "$(cat ./content/initializeState.js)" \
+    '(.taskConfigs[] | select(.task == "JavaScriptTask" and .taskId == "21") | .parameters).script.value.stringValue = $content' $INTEGRATION_FILE >$TMP && cp $TMP $INTEGRATION_FILE
+
+  jq --arg content "$(cat ./content/constructAdminEmail.js)" \
+    '(.taskConfigs[] | select(.task == "JavaScriptTask" and .taskId == "24") | .parameters).script.value.stringValue = $content' $INTEGRATION_FILE >$TMP && cp $TMP $INTEGRATION_FILE
+
+  jq --arg content "$(cat ./content/admin-email.htm)" \
+    '(.taskConfigs[] | select(.task == "EmailTask" and .taskId == "18") | .parameters).TextBody.value.stringValue = $content' $INTEGRATION_FILE >$TMP && cp $TMP $INTEGRATION_FILE
+
+  rm -f $TMP
+}
+
 # ====================================================================
 printf "\nThis is the setup for the App Int Cert Expiry report sample.\n\n"
 OUTFILE=$(mktemp /tmp/appint-sample.setup.out.XXXXXX)
@@ -226,8 +249,10 @@ check_auth_configs_and_maybe_create
 # Replace all the keywords
 INTEGRATION_FILE="${EXAMPLE_NAME}-${rand_string}.json"
 cp ./content/cert-expiry-checker-multiorg-v5-template.json "$INTEGRATION_FILE"
+chmod 644 "$INTEGRATION_FILE"
 
 replace_keywords_in_template
+replace_content_files_in_template
 
 echo "--------------------" >>"$OUTFILE"
 echo "integrationcli integrations create -f $INTEGRATION_FILE -n $INTEGRATION_NAME -p $APPINT_PROJECT -r $REGION" >>"$OUTFILE"
@@ -236,19 +261,19 @@ integrationcli integrations create -f "$INTEGRATION_FILE" -n "$INTEGRATION_NAME"
 # If we try to list versions straightaway, sometimes it does not work
 sleep 2
 
-verarr=($(integrationcli integrations versions list -n "$INTEGRATION_NAME" -r "$REGION" -p "$APPINT_PROJECT" -t "$TOKEN" |
-  grep "\"name\"" |
-  sed -E 's/"name"://g' |
-  tr -d ' "\t,' |
-  sed -E 's@projects/[^/]+/locations/[^/]+/integrations/[^/]+/versions/@@'))
+snapshotarr=($(integrationcli integrations versions list -n "$INTEGRATION_NAME" -r "$REGION" -p "$APPINT_PROJECT" -t "$TOKEN" | jq '.integrationVersions[].snapshotNumber'))
 
-if [[ ${#verarr[@]} -gt 0 ]]; then
-  printf "The Integration has been created. Now let's wait a bit before publishing.\n\n"
+if [[ ${#snapshotarr[@]} -gt 0 ]]; then
+  snapshot="${snapshotarr[0]}"
+  printf "The Integration has been created. Now let's wait a bit before publishing snapshot %s.\n\n" "$snapshot"
   sleep 5
-  ver="${verarr[0]}"
   echo "--------------------" >>"$OUTFILE"
-  echo "integrationcli integrations versions publish -n $INTEGRATION_NAME -v $ver -r $REGION -p $APPINT_PROJECT" >>"$OUTFILE"
-  integrationcli integrations versions publish -n "$INTEGRATION_NAME" -v "$ver" -r "$REGION" -p "$APPINT_PROJECT" -t "$TOKEN" >>"$OUTFILE" 2>&1
+  echo "integrationcli integrations versions publish -n $INTEGRATION_NAME -s $snapshot --latest=false -r $REGION -p $APPINT_PROJECT" >>"$OUTFILE"
+
+  if ! integrationcli integrations versions publish -n "$INTEGRATION_NAME" -s "$snapshot" --latest=false -r "$REGION" -p "$APPINT_PROJECT" -t "$TOKEN" >>"$OUTFILE" 2>&1; then
+    printf "The publish attempt failed. For diagnostics, check the output file $OUTFILE \n"
+    exit 1
+  fi
 
   printf "The Integration has been published. Now let's wait a bit for it to become available.\n\n"
   sleep 16
