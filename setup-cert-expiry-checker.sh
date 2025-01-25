@@ -231,13 +231,15 @@ printf "Logging to %s\n\n" "$OUTFILE"
 
 printf "timestamp: %s\n" "$TIMESTAMP" >>"$OUTFILE"
 check_shell_variables
+check_required_commands jq curl gcloud grep sed tr
+
 printf "\nrandom seed: %s\n" "$rand_string"
 printf "random seed: %s\n" "$rand_string" >>"$OUTFILE"
 
 TOKEN=$(gcloud auth print-access-token)
 if [[ -z "$TOKEN" ]]; then
-  printf "you must have the gcloud cli on your path to use this tool.\n"
-  printf "you must have the gcloud cli on your path to use this tool.\n" >>"$OUTFILE"
+  printf "Could not get a token with the gcloud cli. See logs in %s\n" "$OUTFILE"
+  printf "Could not get a token with the gcloud cli. See logs in %s\n" "$OUTFILE" >>"$OUTFILE"
   exit 1
 fi
 

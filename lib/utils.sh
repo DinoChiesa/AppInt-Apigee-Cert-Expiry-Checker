@@ -28,8 +28,8 @@ maybe_install_integrationcli() {
   # versions get updated regularly. I don't know how to check for latest.
   # So the safest bet is to just unconditionally install.
   #  if [[ ! -d "$HOME/.apigeecli/bin" ]]; then
-  echo "\nInstalling integrationcli"
-  curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
+  printf "Installing latest integrationcli...\n"
+  curl --silent -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
   # fi
   export PATH=$PATH:$HOME/.integrationcli/bin
 }
@@ -82,6 +82,23 @@ check_shell_variables() {
     printf "  %s=%s\n" "$var_name" "${!var_name}"
     printf "  %s=%s\n" "$var_name" "${!var_name}" >>"$OUTFILE"
   done
+}
+
+check_required_commands() {
+  local missing
+  missing=()
+  for cmd in "$@"; do
+    #printf "checking %s\n" "$cmd"
+    if ! command -v "$cmd" &>/dev/null; then
+      missing+=("$cmd")
+    fi
+  done
+  if [[ -n "$missing" ]]; then
+    printf -v joined '%s,' "${missing[@]}"
+    printf "\n\nThese commands are missing; they must be available on path: %s\nExiting.\n" "${joined%,}"
+    printf "\n\nThese commands are missing; they must be available on path: %s\nExiting.\n" "${joined%,}" >>"$OUTFILE"
+    exit 1
+  fi
 }
 
 invoke_one() {

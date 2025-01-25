@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2023-2024 Google LLC
+# Copyright 2023-2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -157,12 +157,13 @@ OUTFILE=$(mktemp /tmp/appint-sample.cleanup.out.XXXXXX)
 printf "\nLogging to %s\n" "$OUTFILE"
 printf "timestamp: %s\n" "$TIMESTAMP" >>"$OUTFILE"
 check_shell_variables
+check_required_commands jq curl gcloud grep sed tr
 
 # it is necessary to get a token... if using curl or integrationcli for anything
 TOKEN=$(gcloud auth print-access-token)
 if [[ -z "$TOKEN" ]]; then
-  printf "you must have the gcloud cli on your path to use this tool.\n"
-  printf "you must have the gcloud cli on your path to use this tool.\n" >>"$OUTFILE"
+  printf "Could not get a token with the gcloud cli. See logs in %s\n" "$OUTFILE"
+  printf "Could not get a token with the gcloud cli. See logs in %s\n" "$OUTFILE" >>"$OUTFILE"
   exit 1
 fi
 
