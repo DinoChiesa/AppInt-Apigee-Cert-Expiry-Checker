@@ -23,7 +23,6 @@ If there are no keystores in the environments, the email looks like this:
 This example is not an official Google product, nor is it part of an
 official Google product.
 
-
 ## Pre-requisites
 
 - a bash-like shell.
@@ -41,13 +40,43 @@ official Google product.
   `gcloud projects add-iam-policy-binding PROJECT ...`
   on those Apigee projects.
 
+## On Permissions
+
+There are Google IAM permissions required to perform the various setup steps.
+These are:
+
+  - in the Integration project, permission to create a service account. This may
+    require `roles/iam.serviceAccountAdmin` role.
+
+  - also in the Integration project, permission to grant _yourself_
+    `iam.serviceAccountUser` role on that service account. Again, this may
+    require you to have `roles/iam.serviceAccountAdmin` role in those projects.
+
+  - in each of the Apigee projects you wish to scan, the permission to grant
+    `apigee.readOnlyAdmin` role to the service account in _that other project_.
+    Your user must have `setIamPolicy` permissions in the Apigee projects you
+    want to scan. This may require you to have `roles/iam.serviceAccountAdmin`
+    role in those projects.
+
+In the above you saw this phrase repeatedly: "may require role X".  The roles
+described there will be sufficient, but if you are "Owner" or "Editor" in all of
+the various projects, then you have all the required permissions.
+
+It might be the case that a single person does not have all the permissions
+required. In that case you cannot use the automated setup script.  You will need
+to manually perform the setup, collaborating with different people who have the
+right permissions in the various projects.
 
 ## Setup
 
-Modify the env.sh file to set variables suitable for your scenario.
+Assuming you have all the required permissions, you can run the automation
+script. To do so, start by modifying the env.sh file to set variables suitable
+for your scenario.
 
 You can set:
-- `APPINT_PROJECT` - the project ID that will run the Integration. It must have integration already enabled.
+
+- `APPINT_PROJECT` - the project ID that will run the Integration. It must have
+  integration already enabled.
 
 - `REGION` - the region to use for the integration in your project.
 
@@ -55,7 +84,15 @@ You can set:
 
 - `APIGEE_PROJECTS` - a comma-separated list of project IDs (no spaces)
 
-- `EMAIL_ADDR`- the email address that will get the report.
+- `EMAIL_ADDR` - the email address that will get the report.
+
+- `SCHEDULE` - This specifies the schedule on which the integration will
+   run. The default value of the `SCHEDULE` variable set in env.sh is "4 21 * *
+   *"; this means the integration is set to execute on a schedule, nightly at
+   21:04. You can modify this by using a different schedule. Use a
+   crontab-compliant schedule specification.  Try
+   [crontab.guru](https://crontab.guru/) to generate a spec, to set into the
+   env.sh file.
 
 
 Save the file.
@@ -97,7 +134,6 @@ integration interactively, using the Cloud Console UI. To do that, open the link
 the script displayed in a browser. Use the TEST button, and specify the Schedule
 trigger.
 
-Note: The integration is set to execute on a schedule, nightly at 21:04.
 
 ### Changing the set of Projects to check
 
@@ -105,7 +141,7 @@ If you want to run it against a _different_ set of Apigee projects than that
 specified in the env.sh file, one option is start all over: to run the clean up
 script, modify env.sh, source it again, and re-run the setup.
 
-But there is an easier way to add a new prject: just enable the existing service
+But there is an easier way to add a new project: just enable the existing service
 account with apigee.readOnlyAdmin role, on the new project or projects. There's
 a script that can do _just that_:
 

@@ -16,8 +16,9 @@
 
 source ./lib/utils.sh
 
-printf "\nThis script adds a Service account as apigee.readOnlyAdmin to a specified project.\n\n"
-check_shell_variables
+printf "\nThis script adds a Service account as apigee.readOnlyAdmin in a specified project.\n"
+printf "To run this,  you may need to have the iam.serviceAccountAdmin role in the specified project.\n"
+check_shell_variables "APPINT_PROJECT"
 
 if [[ -z "$1" ]]; then
   printf "specify a project to add."

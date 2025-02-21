@@ -15,15 +15,6 @@
 
 APPINT_ENDPT=https://integrations.googleapis.com
 
-# Array of environment variable names to check
-env_vars_to_check=(
-  "APPINT_PROJECT"
-  "APIGEE_PROJECTS"
-  "REGION"
-  "EXAMPLE_NAME"
-  "EMAIL_ADDR"
-)
-
 maybe_install_integrationcli() {
   # versions get updated regularly. I don't know how to check for latest.
   # So the safest bet is to just unconditionally install.
@@ -63,8 +54,9 @@ googleapis_whoami() {
 }
 
 check_shell_variables() {
+  local MISSING_ENV_VARS
   MISSING_ENV_VARS=()
-  for var_name in "${env_vars_to_check[@]}"; do
+  for var_name in "$@"; do
     if [[ -z "${!var_name}" ]]; then
       MISSING_ENV_VARS+=("$var_name")
     fi
