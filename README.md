@@ -32,12 +32,10 @@ official Google product.
 - standard unix utilities like grep, sed, and tr
 
 - You must be signed in (`gcloud auth login`) to an account that
-  has access to each of the apigee projects you want to scan.
-  The setup script will create a Service account in the
-  App Integration project, and grant rights to that SA,
-  as apigee.readOnlyAdmin on the Apigee projects.
-  So your user must have the ability to run
-  `gcloud projects add-iam-policy-binding PROJECT ...`
+  has access to each of the apigee projects you want to scan.  The setup script
+  will create a Service account in the App Integration project, and grant rights
+  to that SA, as apigee.readOnlyAdmin on the Apigee projects.  So your user must
+  have the ability to run `gcloud projects add-iam-policy-binding PROJECT ...`
   on those Apigee projects.
 
 ## On Permissions
@@ -93,7 +91,6 @@ You can set:
    crontab-compliant schedule specification.  Try
    [crontab.guru](https://crontab.guru/) to generate a spec, to set into the
    env.sh file.
-
 
 Save the file.
 
@@ -197,4 +194,7 @@ as well as the Integration configuration.
 
 ## Bugs
 
-* ?
+* This README does not document the precise steps people must follow for manual
+  setup, which is necessary in the case in which a single person does not have
+  all the required permissions.
+

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2023-2024 Google LLC
+# Copyright 2023-2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,12 @@
 
 source ./lib/utils.sh
 
-printf "\nThis script adds a Service account as apigee.readOnlyAdmin in a specified project.\n"
-printf "To run this,  you may need to have the iam.serviceAccountAdmin role in the specified project.\n"
+printf "\nThis script adds a Service account as apigee.readOnlyAdmin to a specified\n"
+printf "project. This is useful only if you modify the configuration of the integration\n"
+printf "to use a new project, after having initially run the setup script.\n\n"
+printf "To run this, you may need to have the iam.serviceAccountAdmin role in\n"
+printf "the specified project.\n"
+
 check_shell_variables "APPINT_PROJECT"
 
 if [[ -z "$1" ]]; then
