@@ -26,10 +26,13 @@ official Google product.
 ## Pre-requisites
 
 - a bash-like shell.
+- with these utilities on your path:
+  - curl
+  - other unix utilities like jq, sed, grep, tr, head
+  - [the gcloud cli](https://cloud.google.com/sdk/docs/install-sdk)
 
-- the gcloud cli, installed and available on your path.
-
-- standard unix utilities like grep, sed, and tr
+All of this is available for you in a [Google Cloud Shell](https://cloud.google.com/shell/).
+You can of course use a terminal on your own machine. 
 
 - You must be signed in (`gcloud auth login`) to an account that
   has access to each of the apigee projects you want to scan.  The setup script
